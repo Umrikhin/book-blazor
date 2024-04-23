@@ -11,7 +11,7 @@ RestartSec=10
 # Устанавливает имя процесса для префикса строк журнала
 SyslogIdentifier=asp-net-core-realty
 # Пользователь, под которым следует запускать ваш сервис
-# На своей машине я создал пользователя под именм asp
+# На своей машине я создал пользователя под именем asp
 User=asp
 # Среда исполнения
 Environment=ASPNETCORE_ENVIRONMENT=Production
