@@ -1,0 +1,59 @@
+﻿@page "/trainingBlazor/parent"
+
+<style>
+.box {
+    background-color: gray;
+    border: 5px solid purple;
+}
+</style>
+<h3 class="box" style="width:300px;padding:5px;">Родитель</h3>
+<br/>
+<_Child @ref="child" OnButtonPress="ShowAlert" AlertForGrandson="Это сообщение от родительского компонента (Parent)">
+    <ChildContent>Сообщение из родителя!</ChildContent>
+    <First_ChildContent>Это первый дочерний компонент!</First_ChildContent>
+    <Another_ChildContent>Отправлено от другого дочернего компонента.</Another_ChildContent>
+</_Child>
+<p><b>@alertText</b></p>
+<input @ref="@textInput" />
+<button @onclick="() => textInput.FocusAsync()">Фокус</button>
+
+@* <_OtherChild placeholder="Заполнитель из родителя" maxlength="5" pattern="^[А-Яа-яЁё\s]+$"></_OtherChild> *@
+@* <_OtherChild CustomAttributes="InputAttributesFromParent"></_OtherChild> *@
+<_OtherChild placeholder="Заполнитель из родителя"></_OtherChild>
+
+<h5 class="boxParent" style="width:450px;padding:5px;">Родитель</h5>
+<CascadingValue Value="@Message" Name="message">
+    <CascadingValue Value="@Money" Name="money">
+        <_ChildComponent></_ChildComponent>
+    </CascadingValue>
+</CascadingValue>
+<style>
+    .boxParent {
+        background-color: lightgray;
+        border: 5px solid gray;
+        margin-top: 15px;
+    }
+</style>
+
+@code {
+    //Первый каскадный параметр
+    public string Message { get; set; } = "Привет из родителя!";
+    //Второй каскадный параметр
+    public string Money { get; set; } = "20000";
+    ElementReference textInput;
+    public _Child? child { get; set; }
+    public string alertText { get; set; } = string.Empty;
+    private void ShowAlert()
+    {
+        alertText = "Кнопка нажата из дочернего компонента";
+        child?.ShowMsg();
+    }
+    // public Dictionary<string, object> InputAttributesFromParent { get; set; } = new Dictionary<string, object>()
+    // { 
+    //     {"disabled", true },
+    //     {"readonly", true },
+    //     {"placeholder", "Внесите Имя Из Родителя"},
+    //     {"maxlength", 5},
+    //     {"pattern", @"^[А-Яа-яЁё\s]+$"}
+    // };
+}

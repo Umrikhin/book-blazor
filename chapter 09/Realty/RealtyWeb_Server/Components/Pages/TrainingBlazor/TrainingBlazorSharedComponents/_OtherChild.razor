@@ -1,0 +1,31 @@
+﻿<div>
+    <h4 class="text-primary pt-3">Другой дочерний компонент</h4>
+    <form>
+        @* <input placeholder="@placeholder" /> *@
+        @* <input placeholder="@placeholder" maxlength="@maxlength" pattern="@pattern" /> *@
+        <input @attributes="CustomAttributes" placeholder="Дочерний заполнитель" />
+        <button class="btn btn-success">Отправить</button>
+    </form>
+</div>
+
+@code {
+    // [Parameter]
+    // public string placeholder { get; set; } = "Текст по умолчанию";
+
+    // [Parameter]
+    // public string maxlength { get; set; } = "10";
+
+    // [Parameter]
+    // public string pattern { get; set; } = "^[a-zA-Z]+$";
+
+    // [Parameter]
+    // public Dictionary<string, object> CustomAttributes { get; set; } = new Dictionary<string, object>()
+    // {   
+    //     {"placeholder", "Текст по умолчанию"},
+    //     {"maxlength", 10},
+    //     {"pattern", "^[a-zA-Z]+$"}
+    // };
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> CustomAttributes { get; set; } = new Dictionary<string, object>();
+}

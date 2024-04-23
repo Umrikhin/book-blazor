@@ -1,0 +1,74 @@
+﻿@page "/trainingBlazor/workJs"
+@inject IJSRuntime _JS
+
+<h3>Работа с JavaScript</h3>
+<div>
+    <button class="btn btn-primary" @onclick="ShowConfirm">Кнопка подтверждения</button>
+</div>
+<br />
+<div>
+    @if (IsConfirmed)
+    {
+        <span class="label success">Было сделано подтверждение!</span>
+    }
+    else
+    {
+        <span class="label warning">Подтверждение не было получено!</span>
+    }
+</div>
+<style>
+    .label {
+        color: white;
+        padding: 8px;
+    }
+    .success {
+        background-color: green;
+    }
+    .warning {
+        background-color: orange;
+    }
+</style>
+<br />
+<div class="row">
+    <div class="col">
+        <button class="btn btn-success" @onclick="ShowNotyfSuccess" style="width:200px;">Успех Notyf</button>
+        <button class="btn btn-danger" @onclick="ShowNotyfFailure" style="width:200px;">Неудача Notyf</button>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col">
+        <button class="btn btn-success" @onclick="SweetAlertSuccess" style="width:200px;">Успех SweetAlert2</button>
+        <button class="btn btn-danger" @onclick="SweetAlertFailure" style="width:200px;">Неудача SweetAlert2</button>
+    </div>
+</div>
+
+@code {
+    private string ConfirmText = "Ты уверен, что хочешь нажать?";
+    public bool IsConfirmed { get; set; }
+
+    private async Task ShowConfirm()
+    {
+        IsConfirmed = await _JS.InvokeAsync<bool>("confirm", ConfirmText);
+    }
+
+    private async Task ShowNotyfSuccess()
+    {
+        await _JS.NotyfSuccess("Операция выполнена успешно!");
+    }
+
+    private async Task ShowNotyfFailure()
+    {
+        await _JS.NotyfError("Операция не удалась!");
+    }
+
+    private async Task SweetAlertSuccess()
+    {
+        await _JS.InvokeVoidAsync("ShowSweetAlert", "success", "Процедура завершена успешно!");
+    }
+
+    private async Task SweetAlertFailure()
+    {
+        await _JS.InvokeVoidAsync("ShowSweetAlert", "error", "Операция не удалась!");
+    }
+}

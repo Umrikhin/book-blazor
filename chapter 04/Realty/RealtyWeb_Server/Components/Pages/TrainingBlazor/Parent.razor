@@ -1,0 +1,29 @@
+﻿@page "/trainingBlazor/parent"
+
+<style>
+.box {
+    background-color: gray;
+    border: 5px solid purple;
+}
+</style>
+<h3 class="box" style="width:300px;padding:5px;">Родитель</h3>
+<br/>
+<_Child @ref="child" OnButtonPress="ShowAlert">
+    <ChildContent>Сообщение из родителя!</ChildContent>
+    <First_ChildContent>Это первый дочерний компонент!</First_ChildContent>
+    <Another_ChildContent>Отправлено от другого дочернего компонента.</Another_ChildContent>
+</_Child>
+<p><b>@alertText</b></p>
+<input @ref="@textInput" />
+<button @onclick="() => textInput.FocusAsync()">Фокус</button>
+
+@code {
+    ElementReference textInput;
+    public _Child? child { get; set; }
+    public string alertText { get; set; } = string.Empty;
+    private void ShowAlert()
+    {
+        alertText = "Кнопка нажата из дочернего компонента";
+        child?.ShowMsg();
+    }
+}

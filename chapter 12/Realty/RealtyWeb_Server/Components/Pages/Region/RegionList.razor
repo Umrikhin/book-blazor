@@ -1,0 +1,94 @@
+﻿@page "/region"
+@inject IRegionRepository _regionRepository
+@inject IJSRuntime _JS
+
+<_RemoveConfirmation IsProcessRunning="IsLoading" ConfirmationChanged="ConfirmRemove_Click"></_RemoveConfirmation>
+<div class="row mt-4">
+    <div class="col-6">
+        <h4 class="card-title text-primary">Список регионов</h4>
+    </div>
+    <div class="col-4 offset-2">
+        <a href="region/create" class="btn btn-primary form-control">Новый регион</a>
+    </div>
+    <div class="col-12 p-3">
+        @if (Regions.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Наименование</th>
+                            <th>Код</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Regions)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Nm
+                                </td>
+                                <td>
+                                    @item.GIBDD
+                                </td>
+                                <td>
+                                    <NavLink href="@($"region/edit/{item.Id}")" class="btn btn-info">Изменить</NavLink>
+                                    <button class="btn btn-danger m-1" @onclick="()=>HandleRemove(item.Id)">Удалить</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            if (IsLoading)
+            {
+                <div class="text-center">
+                    <img src="images/loading.gif" />
+                </div>
+            }
+            else
+            {
+                <p>Записей не найдено.</p>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private IEnumerable<Region> Regions { get; set; } = new List<Region>();
+    private bool IsLoading { get; set; } = true;
+    public int RemoveRegionId { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadRegions();
+    }
+
+    private async Task LoadRegions()
+    {
+        Regions = await _regionRepository.GetAll();
+        IsLoading = false;
+    }
+
+    private void HandleRemove(int id)
+    {
+        RemoveRegionId = id;
+        _JS.InvokeVoidAsync("ShowRemoveConfirmationModal");
+    }
+
+    private async Task ConfirmRemove_Click(bool isErase)
+    {
+        IsLoading = true;
+        if (isErase && RemoveRegionId > 0)
+        {
+            await _regionRepository.Delete(RemoveRegionId);
+            await _regionRepository.GetAll();
+            await _JS.InvokeVoidAsync("HideRemoveConfirmationModal");
+        }
+        IsLoading = false;
+    }
+}

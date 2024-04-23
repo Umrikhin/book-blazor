@@ -1,0 +1,14 @@
+﻿@page "/blazor"
+@rendermode InteractiveServer
+
+<p>Число нажатий: @currentCount</p>
+<button @onclick="IncrementCount">+</button>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

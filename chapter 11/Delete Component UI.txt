@@ -1,0 +1,27 @@
+https://getbootstrap.com/docs/5.0
+https://getbootstrap.com/docs/5.0/getting-started/introduction
+https://getbootstrap.com/docs/5.0/components/modal
+https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css
+https://jsfiddle.net/boilerplate/bootstrap
+
+<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="removeConfirmationModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить элемент?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+// $('#removeConfirmationModal').modal('show');
+
+// $('#removeConfirmationModal').modal('hide');

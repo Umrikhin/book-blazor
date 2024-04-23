@@ -1,0 +1,13 @@
+﻿@page "/StatusCode/{responseCode}"
+
+<PageTitle>Код состояния HTTP</PageTitle>
+
+<h3>Код состояния HTTP: @ResponseCode</h3>
+@if (ResponseCode.Equals("404"))
+{
+    <p role="alert">Sorry, there's nothing at this address.</p>
+}
+@code {
+    [Parameter]
+    public string ResponseCode { get; set; } = string.Empty;
+}

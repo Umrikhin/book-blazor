@@ -1,0 +1,54 @@
+﻿@using RealtyWeb_Server.Utils.IService;
+@inject ILocalStorageService LocalStorageService;
+
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+
+@code {
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    internal const string StateKeyName = "MyCounterValue";
+
+    private int _count;
+
+    public int Count 
+    { 
+        get => _count; 
+        set
+        {
+            _count = value;
+            StateHasChanged();
+            SaveState();
+        }
+    }
+
+    private bool _IsDisable;
+
+    public bool IsDisable
+    {
+        get => _IsDisable;
+        set
+        {
+            _IsDisable = value;
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var state = await LocalStorageService.GetStringAsync(StateKeyName);
+        if (state != null)
+        {
+            _count = Convert.ToInt32(state);
+            StateHasChanged();
+        }
+    }
+
+    private void SaveState()
+    {
+        var data = _count;
+        LocalStorageService.SetStringAsync(StateKeyName, data.ToString());
+    }
+
+}

@@ -1,0 +1,198 @@
+﻿@page "/house/create"
+@page "/house/edit/{Id:int}"
+
+@inject IRegionRepository _regionRepository
+@inject IHouseRepository _houseRepository
+@inject NavigationManager _navigationManager
+@inject IJSRuntime _JS
+@inject IFileWork _fileWork
+
+<div class="row my-2">
+    <h3 class="card-title text-primary mb-3">@Caption дом</h3>
+    <div class="col-md-10">
+        @if (IsLoading)
+        {
+            <div class="text-center">
+                <img src="images/loading.gif" />
+            </div>
+        }
+        else
+        {
+            <EditForm Model="house" OnValidSubmit="ModifyHouse">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="form-group">
+                    <label>Лот</label>
+                    <ValidationMessage For="()=>house.Lot"></ValidationMessage>
+                    <InputText @bind-Value="house.Lot" @oninput="HandleInputLot" class="form-control" maxlength="3"></InputText>
+                </div>
+                <div class="form-group">
+                    <label>Адрес</label>
+                    <ValidationMessage For="()=>house.Address"></ValidationMessage>
+                    <InputText @bind-Value="house.Address" class="form-control"></InputText>
+                </div>
+                <div class="row pt-3">
+                    <div class="form-group col-md-4">
+                        <label>Площадь</label>
+                        <ValidationMessage For="()=>house.Squeare"></ValidationMessage>
+                        <InputNumber @bind-Value="house.Squeare" class="form-control"></InputNumber>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Число комнат</label>
+                        <ValidationMessage For="()=>house.NumOfRoms"></ValidationMessage>
+                        <InputNumber @bind-Value="house.NumOfRoms" class="form-control"></InputNumber>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>Цена</label>
+                        <ValidationMessage For="()=>house.Price"></ValidationMessage>
+                        <InputNumber @bind-Value="house.Price" class="form-control"></InputNumber>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Примечание</label>
+                    <ValidationMessage For="()=>house.Notes"></ValidationMessage>
+                    <RadzenHtmlEditor @bind-Value="house.Notes" style="height:200px;"></RadzenHtmlEditor>
+                </div>
+                <div class="row pt-3">
+                    <div class="form-group col-6">
+                        <div class="form-check">
+                            <InputCheckbox @bind-Value="house.IsExclusive" class="form-check-input"></InputCheckbox>
+                            <label class="form-check-label">Эксклюзив</label>
+                        </div>
+                    </div>
+                    <div class="form-group col-6">
+                        <div class="form-check">
+                            <InputCheckbox @bind-Value="house.IsMortagege" class="form-check-input"></InputCheckbox>
+                            <label class="form-check-label">Ипотека</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row pt-3">
+                    <div class="form-group col-md-6">
+                        <label>Регион</label>
+                        <ValidationMessage For="()=>house.RegionId"></ValidationMessage>
+                        <InputSelect @bind-Value="house.RegionId" class="form-select">
+                            <option value="0" disabled="disabled">--Выбор региона--</option>
+                            @foreach (var row in Regions)
+                            {
+                                <option value="@row.Id">@row.Nm</option>
+                            }
+                        </InputSelect>
+                    </div>
+                    <div class="form-group pt-4 col-md-6">
+                        <label class="file-upload">
+                            <InputFile OnChange="HandlePictureUpload"></InputFile>Выберите фото
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group py-2">
+                    <button class="btn btn-primary">@Caption</button>
+                    <NavLink href="house" class="btn btn-secondary">Назад к списку</NavLink>
+                </div>
+            </EditForm>
+        }
+    </div>
+    <div class="col-md-2">
+        <img src="@house.ImageUrl" class="w-100" />
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    private House house { get; set; } = new House() { ImageUrl = "/images/default.png" };
+    private IEnumerable<Region> Regions { get; set; } = new List<Region>();
+    private string Caption { get; set; } = "Добавить";
+    private bool IsLoading { get; set; } = true;
+    public string OldImageUrl { get; set; } = string.Empty;
+
+    private void HandleInputLot(ChangeEventArgs e)
+    {
+        house.Lot = e.Value as string;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadHouse();
+    }
+
+    private async Task LoadHouse()
+    {
+        Regions = await _regionRepository.GetAll();
+        if (Id > 0)
+        {
+            Caption = "Обновить";
+            house = await _houseRepository.Get(Id);
+            if (string.IsNullOrEmpty(house.ImageUrl))
+            {
+                house.ImageUrl = "/images/default.png";
+            }
+            OldImageUrl = house.ImageUrl ?? string.Empty;
+        }
+        _fileWork.CrearTemp();
+        IsLoading = false;
+    }
+
+    private async Task ModifyHouse()
+    {
+        try
+        {
+            if (house.ImageUrl != null)
+            {
+                if (house.ImageUrl.Contains("temp_"))
+                {
+                    var newFileName = _fileWork.RenameFile(house.ImageUrl);
+                    house.ImageUrl = newFileName;
+                }
+            }
+            if (house.Id == 0)
+            {
+                await _houseRepository.Create(house);
+                await _JS.NotyfSuccess("Дом добавлен успешно");
+            }
+            else
+            {
+                if (OldImageUrl != house.ImageUrl && !OldImageUrl.Contains("default.png"))
+                {
+                    _fileWork.DeleteFile(OldImageUrl);
+                }
+                await _houseRepository.Update(house);
+                await _JS.NotyfSuccess("Дом обновлен успешно");
+            }
+            _navigationManager.NavigateTo("house");
+        }
+        catch (Exception ex)
+        {
+            await SweetAlertFailure(ex.Message);
+        }
+    }
+
+    private async Task SweetAlertFailure(string msg)
+    {
+        await _JS.InvokeVoidAsync("ShowSweetAlert", "error", msg);
+    }
+
+    private async Task HandlePictureUpload(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            if (e.GetMultipleFiles().Count > 0)
+            {
+                foreach (var file in e.GetMultipleFiles())
+                {
+                    FileInfo fileInfo = new FileInfo(file.Name);
+                    if (!(fileInfo.Extension.ToLower() == ".jpg" || fileInfo.Extension.ToLower() == ".png" || fileInfo.Extension.ToLower() == ".jpeg"))
+                    {
+                        await _JS.NotyfError("Вы можете использовать только файлы типов jpg, jpeg или png!");
+                        return;
+                    }
+                    house.ImageUrl = await _fileWork.UploadFile(file);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await _JS.NotyfError(ex.Message);
+        }
+    }
+}

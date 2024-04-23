@@ -1,0 +1,50 @@
+﻿<div class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" id="removeConfirmationModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @if (IsProcessRunning)
+                {
+                    <h5 class="modal-title">Удаление</h5>
+                }
+                else
+                {
+                    <h5 class="modal-title">Подтверждение удаления</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                }
+            </div>
+            <div class="modal-body">
+                @if (IsProcessRunning)
+                {
+                    <div class="text-center"><i class="bi-alarm" style="font-size: 2rem; color: cornflowerblue;"></i></div>
+                }
+                else
+                {
+                    <p>Вы действительно хотите удалить элемент?</p>
+                }
+            </div>
+            <div class="modal-footer">
+                @if (IsProcessRunning)
+                {
+                    <button type="button" disabled class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" disabled>Выполнение...</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" @onclick="()=>OnConfirmationChanged(true)">Удалить</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool IsProcessRunning { get; set; }
+    [Parameter]
+    public EventCallback<bool> ConfirmationChanged { get; set; }
+    private async Task OnConfirmationChanged(bool val)
+    {
+        if (val) await ConfirmationChanged.InvokeAsync(val);
+    }
+}

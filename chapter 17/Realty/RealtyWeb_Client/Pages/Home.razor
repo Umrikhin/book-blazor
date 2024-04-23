@@ -1,0 +1,15 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+<AuthorizeView Roles="Administrator">
+    <Authorized>
+        Добро пожаловать: <b>@context.User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value</b>
+        @* Добро пожаловать: <b>@context.User.Identity?.Name</b> *@
+    </Authorized>
+    <NotAuthorized>
+        Вы не авторизированы. Перейдите <a href="/login">Войти</a>
+    </NotAuthorized>
+</AuthorizeView>

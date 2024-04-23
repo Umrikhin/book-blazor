@@ -1,0 +1,68 @@
+﻿@page "/multipleHttpClients"
+@using RealtyWeb_Client.Utils;
+@inject YandexService yahooService;
+@inject WebApiService webapiService;
+@inject IHttpClientFactory factory
+
+<h1>Веб API</h1>
+
+Yandex Url: @yandexAddress<br />
+WebApi Url: @webapiAddress
+
+<h2>Новостройки</h2>
+@if (searchResult != null)
+{
+    <div class="table-responsive">
+        <table class="table-bordered">
+            <thead>
+                <tr>
+                    <th width="30%">ЖК</th>
+                    <th width="5%">Срок</th>
+                    <th width="55%">Адрес</th>
+                    <th width="30%">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in searchResult)
+                {
+                    <tr>
+                        <td>
+                            <b>@row.NameHouse</b> Тип дома: <b>@row.TypeHouse</b><br>
+                            Этажность: <b>@row.NumOfStoreys</b> Количество квартир: <b>@row.NumOfApart</b><br>
+                            @(row.IsParking ?? false ? "Парковка" : string.Empty)
+                        </td>
+                        <td>@row.YearOfDelivery</td>
+                        <td>@row.Address</td>
+                        <td>
+                            <a href="/editnewbuilding/@row.Id">Изменить</a> |
+                            <a href="/deletenewbuilding/@row.Id">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <p>Загрузка...</p>
+}
+
+@code {
+    string? yandexAddress;
+    string? webapiAddress;
+    List<Newbuilding>? searchResult; 
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        yandexAddress = yahooService.GetBaseUrl();
+        webapiAddress = webapiService.GetBaseUrl();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        var client = factory.CreateClient("webapi");
+        var search = await client.GetAsync("api/newbuilding");
+        searchResult = await search.Content.ReadFromJsonAsync<List<Newbuilding>>();
+    }
+}

@@ -1,0 +1,91 @@
+﻿@page "/trainingBlazor/studyingRouting"
+@page "/studyingRouting"
+@page "/trainingBlazor/studyingRouting/{first_parameter}"
+@page "/trainingBlazor/studyingRouting/{first_parameter?}/{second_parameter:int?}"
+
+@inject NavigationManager _navigation
+
+<h3>Учим маршрутизацию</h3>
+
+<h4>Параметр 1: @First_Parameter</h4>
+<h4>Параметр 2: @Second_Parameter</h4>
+
+@* <a href="studyingRouting?First_Param=Realty&Second_Param=Blazor" class="btn btn-primary">Переход к запросу с параметрами</a> *@
+@* <NavLink class="btn btn-primary" href="studyingRouting?First_Param=Realty&Second_Param=Blazor">Переход к запросу с параметрами</NavLink> *@
+<button class="btn btn-primary" @onclick="GoToQueryParam">Переход к запросу с параметрами</button>
+<button class="btn btn-success" @onclick="ExtractParams">Извлечь параметры</button>
+<button class="btn btn-primary" @onclick="NavigateToRelativeURL">Относительный URL</button>
+<button class="btn btn-primary" @onclick="NavigateToAbsoluteURL">Абсолютный URL</button>
+<button class="btn btn-primary" @onclick="NavigateWithForceLoad">Форсированная загрузка</button>
+<button class="btn btn-primary" @onclick="NavigateWithReplaceHistory">Заменить историю</button>
+<br />
+<h3>Параметрамы строки запроса:</h3>
+<h4>Парам. 1: @First_Param</h4>
+<h4>Парам. 2: @Second_Param</h4>
+<h3>Адрес: @GetAddress(City, Street, House)</h3>
+
+@code {
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? City { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Street { get; set; }
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "User-House")]
+    public int? House { get; set; }
+
+    string GetAddress(string? city, string? street, int? house)
+    {
+        string result = string.Empty;
+        if (!string.IsNullOrEmpty(city)) result += city + " ";
+        if (!string.IsNullOrEmpty(street)) result += street + " ";
+        if (house != null) result += house + " ";
+        return result.Trim();
+    }
+
+    [Parameter]
+    public string? First_Parameter { get; set; }
+
+    [Parameter]
+    public int Second_Parameter { get; set; }
+
+    public string? First_Param { get; set; }
+
+    public string? Second_Param { get; set; }
+
+    private void ExtractParams()
+    {
+        var absoluteUri = new Uri(_navigation.Uri);
+        var queryParam = System.Web.HttpUtility.ParseQueryString(absoluteUri.Query);
+        First_Param = queryParam["First_Param"] ?? string.Empty;
+        Second_Param = queryParam["Second_Param"] ?? string.Empty;
+    }
+
+    private void GoToQueryParam()
+    {
+        _navigation.NavigateTo("studyingRouting?First_Param=Realty&Second_Param=Blazor");
+    }
+
+    private void NavigateToRelativeURL()
+    {
+        _navigation.NavigateTo("/weather");
+    }
+
+    private void NavigateToAbsoluteURL()
+    {
+        _navigation.NavigateTo("https://learn.microsoft.com/ru-ru/aspnet/core");
+    }
+
+    private void NavigateWithForceLoad()
+    {
+        _navigation.NavigateTo("/weather", true);
+    }
+
+    private void NavigateWithReplaceHistory()
+    {
+        _navigation.NavigateTo("/weather", true, true);
+    }
+}
+

@@ -1,0 +1,54 @@
+﻿@page "/login"
+@inject ILocalStorageService LocalStorageService
+@inject NavigationManager _NavigationManager
+@inject AuthenticationStateProvider Provider
+
+@if (!string.IsNullOrWhiteSpace(userName))
+{
+    <span>Добро пожаловать: <b>@userName</b></span>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h1>Внесите данные</h1>
+            <EditForm Model="@LoginData" OnValidSubmit="LoginAsync">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <label for="username">Имя пользователя</label>
+                <InputText id="username" @bind-Value="@LoginData.UserName" class="form-control"></InputText>
+                <label for="password">Пароль</label>
+                <InputText type="password" id="password" @bind-Value="@LoginData.Password" class="form-control"></InputText>
+                <p class="my-4">
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </p>
+            </EditForm>
+        </div>
+    </div>
+}
+
+@code
+{
+    public string userName = string.Empty;
+    public LoginViewModel LoginData { get; set; } = new LoginViewModel();
+
+    protected async Task LoginAsync()
+    {
+        //Здесь нужно организовать проверку существования пользователя в базе данных
+        //Сделаем допущение, что любые внесенные данные валидны
+        //Не сохраняем пароль в хранилище браузера
+        var token = new SecurityToken()
+            {
+                UserName = LoginData.UserName,
+                ExpiredAt = DateTime.UtcNow.AddDays(1)
+            };
+        await LocalStorageService.SetAsync(nameof(SecurityToken), token);
+        _NavigationManager.NavigateTo("/", true);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await Provider.GetAuthenticationStateAsync();
+        userName = state?.User?.Identity?.Name ?? string.Empty;
+    }
+}

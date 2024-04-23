@@ -1,0 +1,18 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<div class="alert alert-info">
+    @stateCounter.Count
+</div>
+
+<TestMyCounter />
+
+@code {
+    [CascadingParameter]
+    public _StateCounter stateCounter { get; set; } = null!;
+}

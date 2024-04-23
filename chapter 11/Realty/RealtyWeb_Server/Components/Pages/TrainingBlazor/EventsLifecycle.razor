@@ -1,0 +1,101 @@
+﻿@page "/trainingBlazor/eventsLifecycle"
+
+<h3>Cобытия жизненного цикла</h3>
+
+<button class="btn btn-primary" @onclick="IncreaseCounter">Обновить счетчик</button>
+<button class="btn btn-secondary" @onclick="StartTimer">Запуск таймера</button>
+<h5>Подсчет: @Counting</h5>
+<br />
+
+<div class="border bg-light mt-2 ms-4">
+    <_LifecycleNested CountValue="Counter"></_LifecycleNested>
+</div>
+
+<hr />
+@foreach (var item in LogEvents)
+{
+    <h6>@item</h6>
+    <hr />
+}
+
+@code
+{
+    public int Counter { get; set; }
+    List<string> LogEvents = new List<string>();
+    private int Counting { get; set; } = 0;
+
+    private void IncreaseCounter()
+    {
+        Counter++;
+    }
+
+    protected override void OnInitialized()
+    {
+        LogEvents.Add("OnInitialized вызван");
+        Console.WriteLine("OnInitialized вызван");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        LogEvents.Add("OnInitializedAsync вызван");
+        //await Task.Delay(3000);
+        Console.WriteLine("OnInitializedAsync вызван");
+    }
+
+    protected override void OnParametersSet()
+    {
+        LogEvents.Add("OnParametersSet вызван");
+        Console.WriteLine("OnParametersSet вызван");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        LogEvents.Add("OnParametersSetAsync вызван");
+        //await Task.Delay(3000);
+        Console.WriteLine("OnParametersSetAsync вызван");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Counter = 11;
+        }
+        else
+        {
+            Counter = 99;
+        }
+        LogEvents.Add("OnAfterRender вызван");
+        Console.WriteLine("OnAfterRender вызван");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        LogEvents.Add("OnAfterRenderAsync вызван");
+        Console.WriteLine("OnAfterRenderAsync вызван");
+    }
+
+    private void StartTimer()
+    {
+        var timer = new System.Threading.Timer(IntervalCallBack, null, 1000, 1000);
+    }
+
+    private void IntervalCallBack(object? state)
+    {
+        if (Counting < 7)
+        {
+            Counting++;
+            Console.WriteLine("Counting " + Counting);
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override bool ShouldRender()
+    {
+        LogEvents.Add("ShouldRender вызван");
+        // Console.WriteLine("ShouldRender вызван: возвращено false.");
+        // return false;
+        Console.WriteLine("ShouldRender вызван: возвращено true.");
+        return true;
+    }
+}

@@ -1,0 +1,42 @@
+﻿@page "/trainingBlazor/testMyCounter"
+@using RealtyWeb_Server.Utils.IService;
+@inject ILocalStorageService LocalStorageService
+@inject RealtyWeb_Server.Utils.StateContainerService stateService;
+@implements IDisposable
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @stateService.Value</p>
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+
+    internal const string StateKeyName = "StateValue";
+
+    protected override void OnInitialized()
+    {
+        stateService.OnStateChange += StateHasChanged;
+    }
+
+    private void IncrementCount()
+    {
+        stateService.SetValue(++stateService.Value);
+        LocalStorageService.SetStringAsync(StateKeyName, stateService.Value.ToString());
+    }
+
+    public void Dispose()
+    {
+        stateService.OnStateChange -= StateHasChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        var state = await LocalStorageService.GetStringAsync(StateKeyName);
+        if (state != null)
+        {
+            stateService.SetValue(Convert.ToInt32(state));
+        }
+    }
+}
