@@ -2,6 +2,7 @@
 using Realty_Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,9 @@ namespace Realty_Biz.Repository
         {
             data = new List<Owner>()
             {
-                new Owner() { Id = 1, Fio="Иванов И.М.", StartTitul = DateTime.Parse("06.06.1988"), TypeTitul="Собственность", NumTitul="111-222", EndTitul=DateTime.Parse("15.10.2000"), HouseId = 1  },
-                new Owner() { Id = 2, Fio="Петрова А.С.", StartTitul = DateTime.Parse("15.10.2000"), TypeTitul="Долевая собственность. 1/2 доли", NumTitul="123-222.4", HouseId = 1  },
-                new Owner() { Id = 3, Fio="Петров К.П.", StartTitul = DateTime.Parse("15.12.2002"), TypeTitul="Долевая собственность. 1/2 доли", NumTitul="123-222.6", HouseId = 1  }
+                new Owner() { Id = 1, Fio="Иванов И.М.", StartTitul = DateTime.Parse("06.06.1988", CultureInfo.GetCultureInfo("ru")), TypeTitul="Собственность", NumTitul="111-222", EndTitul=DateTime.Parse("15.10.2000", CultureInfo.GetCultureInfo("ru")), HouseId = 1  },
+                new Owner() { Id = 2, Fio="Петрова А.С.", StartTitul = DateTime.Parse("15.10.2000", CultureInfo.GetCultureInfo("ru")), TypeTitul="Долевая собственность. 1/2 доли", NumTitul="123-222.4", HouseId = 1  },
+                new Owner() { Id = 3, Fio="Петров К.П.", StartTitul = DateTime.Parse("15.12.2002", CultureInfo.GetCultureInfo("ru")), TypeTitul="Долевая собственность. 1/2 доли", NumTitul="123-222.6", HouseId = 1  }
             };
         }
 
