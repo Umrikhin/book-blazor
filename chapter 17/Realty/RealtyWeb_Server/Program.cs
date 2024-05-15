@@ -1,4 +1,4 @@
-using RealtyWeb_Server.Components;
+п»їusing RealtyWeb_Server.Components;
 using RealtyWeb_Server.Utils.IService;
 using RealtyWeb_Server.Utils;
 using Realty_Biz.Repository.IRepository;
@@ -25,7 +25,7 @@ builder.Services.AddScoped<IFileWork, FileWork>();
 builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<DialogService>();
 
-//**************Сервисы для аутентификации*********************
+//**************РЎРµСЂРІРёСЃС‹ РґР»СЏ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёРё*********************
 builder.Services.AddControllers();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
@@ -60,7 +60,7 @@ else
 app.UseStatusCodePagesWithRedirects("/StatusCode/{0}");
 app.UseHttpsRedirection();
 
-//**************Сервисы для аутентификации*********************
+//**************РЎРµСЂРІРёСЃС‹ РґР»СЏ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёРё*********************
 app.UseAuthentication();
 app.MapControllers();
 //*************************************************************

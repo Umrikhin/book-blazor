@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components.Authorization;
+п»їusing Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using RealtyWeb_Client;
@@ -8,7 +8,7 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-//**************Сервисы для аутентификации*********************
+//**************РЎРµСЂРІРёСЃС‹ РґР»СЏ Р°СѓС‚РµРЅС‚РёС„РёРєР°С†РёРё*********************
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
