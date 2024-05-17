@@ -20,7 +20,7 @@ else
     app.UseDeveloperExceptionPage();
 }
 
-app.UseStatusCodePagesWithRedirects("/StatusCode/{0}");
+app.UseStatusCodePagesWithRedirects("~/StatusCode/{0}");
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
