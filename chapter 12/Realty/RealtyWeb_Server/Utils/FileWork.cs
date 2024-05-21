@@ -32,7 +32,7 @@ namespace RealtyWeb_Server.Utils
             string fileTarget = Path.GetFileName(file).Replace("temp_", "house_");
             string fullFileTarget = Path.Combine(_webHostEnvironment.WebRootPath, "images", "houses", fileTarget);
             File.Copy(fullFile, fullFileTarget, true);
-            return $"/images/houses/{fileTarget}";
+            return $"images/houses/{fileTarget}";
         }
 
         public bool CrearTemp()
@@ -71,7 +71,7 @@ namespace RealtyWeb_Server.Utils
             var filePath = Path.Combine(folderPath, fileName);
             await using FileStream fs = new FileStream(filePath, FileMode.Create);
             await file.OpenReadStream(maxSize).CopyToAsync(fs);
-            var fullPath = $"/images/houses/{fileName}";
+            var fullPath = $"images/houses/{fileName}";
             return fullPath;
         }
     }
