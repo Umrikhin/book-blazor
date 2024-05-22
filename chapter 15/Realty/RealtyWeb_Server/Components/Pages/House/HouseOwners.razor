@@ -128,7 +128,7 @@ else
             IsLoading = true;
             StateHasChanged();
             house = await _houseRepository.Get(Id);
-            house.ImageUrl = string.IsNullOrEmpty(house.ImageUrl) ? "/images/default.png" : house.ImageUrl;
+            house.ImageUrl = string.IsNullOrEmpty(house.ImageUrl) ? "images/default.png" : house.ImageUrl;
             Owners = await _ownersRepository.GetAll(Id);
             IsLoading = false;
             StateHasChanged();
