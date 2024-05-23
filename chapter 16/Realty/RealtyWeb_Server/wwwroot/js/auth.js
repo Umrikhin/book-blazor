@@ -1,6 +1,6 @@
 ﻿export function SignIn(login, rigths, redirect) {
 
-    var url = "/api/auth/signin";
+    var url = "./api/auth/signin";
     var xhr = new XMLHttpRequest();
 
     xhr.open("POST", url);
@@ -26,7 +26,7 @@
 
 export function SignOut(redirect) {
 
-    var url = "/api/auth/signout";
+    var url = "./api/auth/signout";
     var xhr = new XMLHttpRequest();
 
     xhr.open("POST", url);

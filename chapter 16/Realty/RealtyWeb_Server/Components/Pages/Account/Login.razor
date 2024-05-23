@@ -36,7 +36,7 @@
         if (IsExistsUser)
         {
             var authModule = await _JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
-            await authModule.InvokeVoidAsync("SignIn", Username, "Administrator", "/");
+            await authModule.InvokeVoidAsync("SignIn", Username, "Administrator", "./");
         }
         else
         {
@@ -46,6 +46,6 @@
     private async void btnLogout_Click()
     {
         var authModule = await _JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/auth.js");
-        await authModule.InvokeVoidAsync("SignOut", "/");
+        await authModule.InvokeVoidAsync("SignOut", "./");
     }
 }

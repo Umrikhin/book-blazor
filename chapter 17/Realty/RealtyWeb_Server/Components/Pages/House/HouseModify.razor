@@ -100,7 +100,7 @@
 @code {
     [Parameter]
     public int Id { get; set; }
-    private House house { get; set; } = new House() { ImageUrl = "/images/default.png" };
+    private House house { get; set; } = new House() { ImageUrl = "images/default.png" };
     private IEnumerable<Region> Regions { get; set; } = new List<Region>();
     private string Caption { get; set; } = "Добавить";
     private bool IsLoading { get; set; } = true;
@@ -125,7 +125,7 @@
             house = await _houseRepository.Get(Id);
             if (string.IsNullOrEmpty(house.ImageUrl))
             {
-                house.ImageUrl = "/images/default.png";
+                house.ImageUrl = "images/default.png";
             }
             OldImageUrl = house.ImageUrl ?? string.Empty;
         }

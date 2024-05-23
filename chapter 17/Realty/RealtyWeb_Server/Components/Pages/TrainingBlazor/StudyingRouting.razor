@@ -70,7 +70,7 @@
 
     private void NavigateToRelativeURL()
     {
-        _navigation.NavigateTo("/weather");
+        _navigation.NavigateTo("weather");
     }
 
     private void NavigateToAbsoluteURL()
@@ -80,12 +80,12 @@
 
     private void NavigateWithForceLoad()
     {
-        _navigation.NavigateTo("/weather", true);
+        _navigation.NavigateTo("weather", true);
     }
 
     private void NavigateWithReplaceHistory()
     {
-        _navigation.NavigateTo("/weather", true, true);
+        _navigation.NavigateTo("weather", true, true);
     }
 }
 
