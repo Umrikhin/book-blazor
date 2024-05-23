@@ -56,6 +56,7 @@ app.UseHttpsRedirection();
 
 //**************Сервисы для аутентификации*********************
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 //*************************************************************
 
