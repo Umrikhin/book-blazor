@@ -62,7 +62,7 @@
     {
         try
         {
-            var response = await Http.PostAsJsonAsync("/api/newbuilding", newbuilding);
+            var response = await Http.PostAsJsonAsync("api/newbuilding", newbuilding);
             Newbuilding? newbuildingResponse = await response.Content.ReadFromJsonAsync<Newbuilding>();
             if (newbuildingResponse?.Id > 0)
             {

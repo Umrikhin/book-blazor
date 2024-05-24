@@ -43,7 +43,7 @@ else
                 ExpiredAt = DateTime.UtcNow.AddDays(1)
             };
         await LocalStorageService.SetAsync(nameof(SecurityToken), token);
-        _NavigationManager.NavigateTo("/", true);
+        _NavigationManager.NavigateTo("./", true);
     }
 
     protected override async Task OnInitializedAsync()

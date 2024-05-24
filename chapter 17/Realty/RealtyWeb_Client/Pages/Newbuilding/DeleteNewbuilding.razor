@@ -31,13 +31,13 @@
     Newbuilding? newbuilding = new Newbuilding();
     protected override async Task OnInitializedAsync()
     {
-        newbuilding = await Http.GetFromJsonAsync<Newbuilding>("/api/newbuilding/" + Id);
+        newbuilding = await Http.GetFromJsonAsync<Newbuilding>($"api/newbuilding/{Id}");
     }
     protected async Task Delete()
     {
         try
         {
-            var response = await Http.DeleteAsync("/api/newbuilding/" + Id);
+            var response = await Http.DeleteAsync($"api/newbuilding/{Id}");
             bool deleteResponse = await response.Content.ReadFromJsonAsync<bool>();
             if (deleteResponse)
             {

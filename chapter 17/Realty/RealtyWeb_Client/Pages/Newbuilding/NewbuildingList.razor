@@ -53,7 +53,7 @@
     {
         try
         {
-            var response = await _httpClient.GetAsync("/api/newbuilding");
+            var response = await _httpClient.GetAsync("api/newbuilding");
             response.EnsureSuccessStatusCode();
             newbuildingList = await response.Content.ReadFromJsonAsync<List<Newbuilding>>();
         }
