@@ -3,7 +3,7 @@
 @inject HttpClient _httpClient
 <h1>Новостройки</h1>
 <div>
-    <a href="/addnewbuilding"> Новый ЖК</a>
+    <a href="addnewbuilding"> Новый ЖК</a>
     @if (newbuildingList != null)
     {
         <div class="table-responsive">
@@ -28,8 +28,8 @@
                             <td>@row.YearOfDelivery</td>
                             <td>@row.Address</td>
                             <td>
-                                <a href="/editnewbuilding/@row.Id">Изменить</a>
-                                <a href="/deletenewbuilding/@row.Id">Удалить</a>
+                                <a href="editnewbuilding/@row.Id">Изменить</a>
+                                <a href="deletenewbuilding/@row.Id">Удалить</a>
                             </td>
                         </tr>
                     }
@@ -53,7 +53,7 @@
     {
         try
         {
-            var response = await _httpClient.GetAsync("/api/newbuilding");
+            var response = await _httpClient.GetAsync("api/newbuilding");
             response.EnsureSuccessStatusCode();
             newbuildingList = await response.Content.ReadFromJsonAsync<List<Newbuilding>>();
         }

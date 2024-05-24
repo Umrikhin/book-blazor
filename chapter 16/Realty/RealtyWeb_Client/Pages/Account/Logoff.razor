@@ -22,6 +22,6 @@
     private void btnLogout_Click()
     {
         ((SpecialAuthenticationStateProvider)Provider).MakeUserAnonymous();
-        _NavigationManager.NavigateTo("/");
+        _NavigationManager.NavigateTo("./");
     }
 }

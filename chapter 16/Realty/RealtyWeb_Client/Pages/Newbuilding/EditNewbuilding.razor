@@ -61,13 +61,13 @@
     Newbuilding newbuilding = new Newbuilding();
     protected override async Task OnInitializedAsync()
     {
-        newbuilding = await Http.GetFromJsonAsync<Newbuilding>("/api/newbuilding/" + Id) ?? new();
+        newbuilding = await Http.GetFromJsonAsync<Newbuilding>($"api/newbuilding/{Id}") ?? new();
     }
     protected async Task Save()
     {
         try
         {
-            var response = await Http.PutAsJsonAsync("/api/newbuilding/" + Id, newbuilding);
+            var response = await Http.PutAsJsonAsync($"api/newbuilding/{Id}", newbuilding);
             bool newbuildingResponse = await response.Content.ReadFromJsonAsync<bool>();
             if (newbuildingResponse)
             {
