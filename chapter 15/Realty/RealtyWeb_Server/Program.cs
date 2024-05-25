@@ -29,6 +29,7 @@ builder.Services.AddControllers();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
+            options.LoginPath = "/login";
             options.Cookie.Name = "realty_auth";
             options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
             options.EventsType = typeof(RealtyWeb_Server.Controllers.CookieAuthenticationEvents);

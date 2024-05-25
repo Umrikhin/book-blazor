@@ -30,6 +30,7 @@ builder.Services.AddControllers();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options =>
         {
+            options.LoginPath = "/login";
             options.Cookie.Name = "realty_auth";
             options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict;
             options.EventsType = typeof(RealtyWeb_Server.Controllers.CookieAuthenticationEvents);
@@ -42,7 +43,7 @@ var app = builder.Build();
 
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
-    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
 });
 
 // Configure the HTTP request pipeline.
